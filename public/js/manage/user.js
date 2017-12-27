@@ -3,25 +3,23 @@ Custom module for you to write your own javascript functions
 **/
 var User = function () {
 
-    var elem_block_loadding;
-    var elm_active;
-    var url = '';
-
     var callBackDeleteData = function (res) {
-
-        console.log( res );
 
         if ( res.meta.success ) {
 
-            var id = res.response.id;
-
-            var row  = $('#dataTable').find('tr[data-id=' + id + ']').remove();
-            $('#modal-delete').modal('hide');
+            var id  = res.response.id;
+            // var row = $('#dataTable').find('tr[data-id=' + id + ']').remove();
             
-            // $('#data_table').load( this.href + ' #data_table');
-            // $('#data_table').load( url + ' #data_table');
+            $('#modal-delete').modal('hide');
+            $("#content-data").load(" #data-table");
         }
     };
+
+    var callBackInsertData = function (res) {
+
+        $("#content-data").load(" #data-table");
+    };
+
 
     // public functions
     return {
@@ -32,8 +30,8 @@ var User = function () {
 
             $(document).ready(function(){
 
-                var form_add_new    = $('#form-add-new');
-                var form_edit       = $('#form-edit');
+                var form_add_new    = $('#form-add-user');
+                var form_edit       = $('#form-edit-user');
 
                 var rules = {
 
@@ -73,12 +71,9 @@ var User = function () {
                     rules,
                     message
                 });
-                form_edit.validate({
-                    rules,
-                    message
-                });
 
-                $('.btn-delete').on('click', function() {
+
+                $(document).on('click', '.btn-delete', function() {
 
                     var id  = $(this).closest('tr').attr('data-id');
 
@@ -86,13 +81,12 @@ var User = function () {
                     $('#modal-delete').modal('show');
                 });
 
-                $('.btn-submit').on('click', function(e) {
+                $(document).on('click', '.btn-submit-delete-user', function(e) {
 
                     e.preventDefault();
                     
-                    var index_url   = $('#route-home-page').val();
-                    var id          = $(this).closest('form').find('input[name=id]').val();
-                    url             = $(this).closest('form').attr('data-url');
+                    var id  = $(this).closest('form').find('input[name=id]').val();
+                    var url = $(this).closest('form').attr('data-url');
 
                     var data = {
 
@@ -100,8 +94,44 @@ var User = function () {
                     };
 
                     ajax_default(url, data, callBackDeleteData);
-                    // $('#dataTable').load( this.href + ' #dataTable');
-                    // $('#dataTable').load( index_url + '#dataTable' );
+                });
+
+                $('.btn-submit-add-user').on('click', function(e) {
+
+                    e.preventDefault();
+
+                    if ( form_add_new.valid() ) {
+
+                        e.preventDefault();
+
+                        var url         = $('#route-add-user').val();
+                        var form        = $('#form-add-user').get(0); 
+                        var formData    = new FormData( form );
+
+                        $.ajax({
+                            type:'POST',
+                            url:            url,
+                            data:           formData,
+                            cache:          false,
+                            contentType:    false,
+                            processData:    false,
+
+                            success:function(res){
+                                
+                                callBackInsertData(res);
+                            },
+                            error: function(res){
+
+                                console.log("error");
+                                console.log(res);
+                            }
+                        });
+
+                    } else {
+
+                        console.log('form not valid');
+                    }
+
                 });
 
             });

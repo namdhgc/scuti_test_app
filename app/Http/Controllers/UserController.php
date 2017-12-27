@@ -8,6 +8,7 @@ use Session;
 use Cache;
 use Lang;
 use Image;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Models\User as ModelUser;
 use App\Http\Controllers\Controller;
 use App\Http\Response\Response;
@@ -49,13 +50,13 @@ class UserController extends Controller
 
         $ModelUser  = new ModelUser();
 
-        $limit      = 1;
+        $limit      = 10;
         $offset     = null;
         $selectType = Config::get('system.type.query.paginate');
         $fields     = null;
         $column     = [];
-        $sort       = null;
-        $sort_type  = null;
+        $sort       = 'created_time';
+        $sort_type  = 'DESC';
 
         $where      = [
             [
@@ -65,8 +66,10 @@ class UserController extends Controller
         ];
 
         $order      = [
-            'fields' => $sort,
-            'operator'  => $sort_type
+            [
+                'fields'    => $sort,
+                'operator'  => $sort_type
+            ]
         ];
 
         $results = $ModelUser->select( $where, $limit, $offset, $selectType, $order, $fields, $column );
@@ -77,44 +80,91 @@ class UserController extends Controller
     public function insertData()
     {
 
+        $ModelUser      = new ModelUser();
+        $Response       = new Response();
+        $results        = $Response->response(200,'','',true);
         $name           = Input::get('name');
         $address        = Input::get('address');
         $age            = Input::get('age');
-        $avatar         = Input::get('avatar');
+        $avatar         = Input::file('avatar');
         $created_time   = strtotime( \Carbon\Carbon::now()->toDateTimeString() );
 
-        $tmp_path           = public_path( Config::get('spr.system.uploadMedia.path_tmp_upload'));
-        $path               = Config::get('spr.system.uploadMedia.path_image_upload');
-        $preview_path       = Config::get('spr.system.uploadMedia.path_tmp_upload');
-
-        $client_original_mime   = $file->getMimeType();
-        $filename               = $file[ 'tmp_name' ];
-
-        $file_upload    = $tmp_path . '/' . $filename . '.' . Config::get('spr.type.mimeFile')[$client_original_mime];
-
-        $full_path_file = $path . '/' . $filename . '.' . Config::get('spr.type.mimeFile')[$client_original_mime];
-        Image::make($file_upload)->save($full_path_file, 100);
-
-        // $full_path_file_preview = $preview_path . '/' . $filename. '.' . Config::get('spr.type.mimeFile')[$client_original_mime];
-        // Image::make($file_upload)->resize(320, null, function ($constraint) {
-        //     $constraint->aspectRatio();
-        // })->save($full_path_file_preview);
-
-        // insert data into database
         $data = [
-
-            'name'              => $name,
-            'address'           => $address,
-            'age'               => $age,
-            'avatar_path'       => $full_path_file,
-            // 'preview_avatar_path'      => $preview_path,
-            'mime'              => Config::get('spr.type.mimeFile')[$client_original_mime],
-            'created_time'      => $created_time,
+            'name'          => $name,
+            'address'       => $address,
+            'age'           => $age,
+            'created_time'  => $created_time,
         ];
 
-        $id = $ModelMedia->insertData($data);
+        $validator = Validator::make(
+            [
+                'name'      => $name,
+                'address'   => $address,
+                'age'       => $age,
+            ],
+            [
+                'name'      => 'required | max:100',
+                'address'   => 'required | max:300',
+                'age'       => 'required | numeric',
+            ]
+        );
 
+        if ( $validator->fails() ) {
+
+            // The given data did not pass validation
+            $results['meta']['code']    = '0005';
+            $results['meta']['success'] = false;
+            $results['meta']['msg']     = Lang::get('message.web.error.0005');
+
+        } else {
+
+            if ( !empty( $avatar ) ) {
+                
+                $file_name      = $avatar->getClientOriginalName();
+                $file_extension = $avatar->getClientOriginalExtension();
+                $file_real_path = $avatar->getRealPath();
+                $file_mime      = $avatar->getMimeType();
+
+                // image mime types start with "image/"
+                if( substr( $file_mime, 0, 5 ) == 'image' ) {
+
+                    // this is an image
+                    // move file to public path
+                    $full_path_file = 'upload/' . $file_name;
+                    $avatar->move( public_path() . '/upload', $file_name );
+
+                    $data['avatar_path'] = $full_path_file;
+                    
+                } else {
+
+                    // this is not an image
+                    $results['meta']['code']    = '0004';
+                    $results['meta']['success'] = false;
+                    $results['meta']['msg']     = Lang::get('message.web.error.0004');
+                }
+
+            }
+
+            $added_record = $ModelUser->insert( $data );
+
+            if ( $added_record['meta']['success'] ) {
+
+                // insert successfull
+                $results['response']        = $added_record['response'];
+                $results['meta']['msg']     = Lang::get('message.web.success.0001');
+
+            } else {
+
+                $results['meta']['code']    = '0003';
+                $results['meta']['success'] = false;
+                $results['meta']['msg']     = Lang::get('message.web.error.0003');
+            }
+        }
+
+        return $results;
     }
+
+
 
     public function deleteData()
     {

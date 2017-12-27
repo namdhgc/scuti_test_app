@@ -5,15 +5,21 @@
 			'error' => [
 				'0001' => "Record not found!",
 				'0002' => "Update fail. Please try again!",
+				'0003' => "Insert fail. Please try again!",
+				'0004' => "Your file is not an image!",
+				'0005' => "The given data did not pass validation!",
 			],
+
 			'success' => [
-				'0001' => "Add new successfull.",
+				'0001' => "Insert successfull.",
 				'0002' => "Update successfull.",
 				'0003' => "Delete successfull.",
 			],
+
 			'warning' => [
 			]
 		],
+		
 		'api'	=> [
 			'error' => [
 			],

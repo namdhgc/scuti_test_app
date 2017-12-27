@@ -1,7 +1,6 @@
 /**
 Custom module for you to write your own javascript functions
 **/
-
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -10,55 +9,57 @@ $.ajaxSetup({
 
 var getMessage = function(msg) {
 
-  var message = '';
-  var i = 0;
+    var message = '';
+    var i = 0;
 
-  if( $.isArray(msg) || typeof(msg) == "object" ) {
+    if ($.isArray(msg) || typeof(msg) == "object") {
 
-    for( i in msg ) {
+        for (i in msg) {
 
-        message += getMessage( msg[i] ) + "<br>";
+            message += getMessage(msg[i]) + "<br>";
+        }
+
+    } else {
+
+        message = msg + "<br>";
     }
 
-  } else {
-    
-    message = msg + "<br>";
-  }
-
-  return message;
+    return message;
 };
 
 var show_message = function(res) {
 
-  var type_message  = 'success';
-  var show          = true;
-  if( !res.meta.success ) type_message = 'error';
-  if( res.meta.success && res.meta.msg.length == 0 ) show = false;
+    var type_message = 'success';
+    var show = true;
+    if (!res.meta.success) type_message = 'error';
+    if (res.meta.success && res.meta.msg.length == 0) show = false;
 
-  if(show) {
+    if (show) {
 
-    var msg = res.meta.msg;
+        var msg = res.meta.msg;
 
-    var message = getMessage( msg ) ;
-    // toastr[type_message](message, "Notifications")
-  }
+        var message = getMessage(msg);
+        // toastr[type_message](message, "Notifications")
+    }
 };
 
-var ajax_default = function(url, data, callBack) {
+var ajax_default = function(url, data, callBack, processData = true, contentType = true) {
 
     $.ajax({
         method: "POST",
         url: url,
         dataType: 'json',
         data: data,
-        success : function(res){
+        // processData: processData,
+        // contentType: contentType,
+        success: function(res) {
 
-        if( res.meta != undefined ){
-            show_message(res);
-        }
+            if (res.meta != undefined) {
+                show_message(res);
+            }
             callBack(res);
-        }
-        ,error: function (jqXHR, exception) {
+        },
+        error: function(jqXHR, exception) {
 
             var msg = '';
 

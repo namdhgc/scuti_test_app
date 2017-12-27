@@ -33,6 +33,19 @@ Route::group(['as' => 'post-'], function () {
 		$results = App::make('App\Http\Controllers\UserController')->deleteData();
 
 		return json_encode( $results );
-	    // return view('index')->with( 'data', $results );
+	}]);
+
+	Route::post('add-user', ['as' => 'add-user', function () {
+
+		$results = App::make('App\Http\Controllers\UserController')->insertData();
+
+		return json_encode( $results );
+	}]);
+
+	Route::post('edit-user', ['as' => 'edit-user', function () {
+
+		$results = App::make('App\Http\Controllers\UserController')->updateData();
+
+		return json_encode( $results );
 	}]);
 });

@@ -104,7 +104,7 @@ class User extends Model
 		return $results;
 	}
 
-	public function insert ( $data, $where = array())
+	public function insert ( $data )
 	{
 		
 		$Response = new Response();
@@ -112,21 +112,6 @@ class User extends Model
 
 		try {
 			$query = DB::table($this->table);
-
-			foreach ($where as $key => $value) {
-
-				switch ($value['operator']) {
-					case 'in':
-						$query = $query->whereIn($value['fields'], $value['value']);
-						break;
-					case 'null':
-						$query = $query->whereNull($value['fields']);
-						break;
-					default:
-						$query = $query->where($value['fields'], $value['operator'], $value['value']);
-						break;
-				}
-			}
 
 			$query->insert($data);
 
