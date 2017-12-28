@@ -76,6 +76,11 @@ var User = function () {
                     message
                 });
 
+                form_edit.validate({
+                    rules,
+                    message
+                });
+
                 $(document).on('click', '.btn-delete', function() {
 
                     var id  = $(this).closest('tr').attr('data-id');
@@ -129,9 +134,54 @@ var User = function () {
                                 console.log(res);
                             }
                         });
-
                     } else {
+                        console.log('form not valid');
+                    }
+                });
+                
+                $(document).on('click', '.btn-edit', function() {
+                    var id      = $(this).closest('tr').attr('data-id');
+                    var name    = $(this).closest('tr').attr('data-name');
+                    var address = $(this).closest('tr').attr('data-address');
+                    var age     = $(this).closest('tr').attr('data-age');
 
+                    form_edit.find('input[name=id]').first().val( id );
+                    form_edit.find('input[name=name]').first().val( name );
+                    form_edit.find('textarea[name=address]').first().val( address );
+                    form_edit.find('input[name=age]').first().val( age );
+                });
+
+                $('.btn-submit-edit-user').on('click', function(e) {
+
+                    e.preventDefault();
+
+                    if ( form_edit.valid() ) {
+
+                        e.preventDefault();
+
+                        var url         = $('#route-edit-user').val();
+                        var form        = $('#form-edit-user').get(0); 
+                        var formData    = new FormData( form );
+
+                        $.ajax({
+                            type:'POST',
+                            url:            url,
+                            data:           formData,
+                            cache:          false,
+                            contentType:    false,
+                            processData:    false,
+
+                            success:function(res){
+                                
+                                callBackUpdateData(res);
+                            },
+                            error: function(res){
+
+                                console.log("error");
+                                console.log(res);
+                            }
+                        });
+                    } else {
                         console.log('form not valid');
                     }
 
