@@ -43,8 +43,8 @@
 <div class="row">
 
     <input type="hidden" id="route-home-page"   value="{{ URL::Route('get-home-page') }}">
-    <input type="hidden" id="route-add-user"    value="{{ URL::Route('post-add-user') }}">
-    <input type="hidden" id="route-edit-user"   value="{{ URL::Route('post-edit-user') }}">
+    <input type="hidden" id="route-add-user"    value="{{ URL::Route('add-user') }}">
+    <input type="hidden" id="route-edit-user"   value="{{ URL::Route('edit-user') }}">
 
     <div class="col-md-12 manager-table">
         <p>This element outside div class="content-data"</p>
@@ -135,7 +135,7 @@
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
-                <form action="#" data-url="{{ URL::Route('post-delete-user') }}" class="form-delete-user" method="POST">
+                <form action="#" data-url="{{ URL::Route('delete-user') }}" class="form-delete-user" method="POST">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Form delete user</h4>
@@ -206,6 +206,53 @@
     </form>
     <!-- End modal add-new -->
 
+
+    <!-- Modal edit -->
+    <form action="#" method="POST" class="form-edit-user form-action" id="form-edit-user" enctype="multipart/form-data" >
+        <input type="hidden" class="no-clear" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="id" value="">
+        <div class="col-md-12">
+            <div class="portlet light">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class=" icon-layers"></i>
+                        <span class="caption-subject">Form edit user</span>
+                    </div>
+                    <div class="actions">
+                    </div>
+                </div>
+                <div class="portlet-body clearfix">
+                    <div class="form-body">
+                        <div class="form-group ">
+                            <label for="Name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="Name of user">
+                        </div>
+                        <div class="form-group  ">
+                            <label for="address">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" placeholder="Address of user">{{ old('address') }}</textarea>
+                        </div>
+                        <div class="form-group ">
+                            <label for="code">Age</label>
+                            <input type="text" class="form-control" id="age" name="age" value="{{ old('age') }}" placeholder="Age of user">
+                        </div>
+                        <div class="form-group ">
+                            <label for="code">Avatar</label>
+                            <input type="file" name="avatar" class="form-control" id="avatar">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-success btn-submit-edit-user">Edit</button>
+                                <a href="javascript:;" class="btn default btn-cancel">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- End modal edit -->
 
 </div>
 @endsection

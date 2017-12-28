@@ -155,7 +155,7 @@ class UserController extends Controller
             }
         }
 
-        return json_encode( $results );
+        return response()->json($results);;
     }
 
     public function deleteData()
@@ -209,7 +209,7 @@ class UserController extends Controller
             $results['meta']['msg']     = Lang::get('message.web.error.0001');
         }
 
-        return json_encode( $results );
+        return response()->json($results);
     }
 
 }

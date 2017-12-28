@@ -16,26 +16,12 @@
 
 Route::group(['as' => 'get-'], function () {
 
-	Route::get('/', ['as' => 'home-page', function () {
-	    
-		return App::make('App\Http\Controllers\UserController')->getData();
-	}]);
+	Route::get('/', 'UserController@getData')->name('home-page');
 });
 
-Route::group(['as' => 'post-'], function () {
+Route::group(['prefix' => 'user'], function() {
 
-	Route::post('delete-user', ['as' => 'delete-user', function () {
-
-		return App::make('App\ttp\Controllers\UserController')->deleteData();
-	}]);
-
-	Route::post('add-user', ['as' => 'add-user', function () {
-
-		return App::make('App\Http\Controllers\UserController')->insertData();
-	}]);
-
-	Route::post('edit-user', ['as' => 'edit-user', function () {
-
-		return App::make('App\Http\Controllers\UserController')->updateData();
-	}]);
+	Route::post('delete', 'UserController@deleteData')->name('delete-user');
+	Route::post('add', 'UserController@insertData')->name('add-user');
+	Route::post('edit', 'UserController@updateData')->name('edit-user');
 });

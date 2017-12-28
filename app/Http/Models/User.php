@@ -67,11 +67,8 @@ class User extends Model
 				}
 			}
 
-			// DB::enableQueryLog();
-
 			switch ($selectType) {
 				case Config::get('system.type.query.count'):
-				// DB::enableQueryLog();
 					$query = $query->count();
 					break;
 				case Config::get('system.type.query.max'):
@@ -88,10 +85,7 @@ class User extends Model
 					$query = $query->get();
 					break;
 			}
-			// $queries = DB::getQueryLog();
-			// 	$last_query = end($queries);
-			// 	print_r($last_query);
-				// exit;
+
 			$results['response'] = $query;
 
 		} catch (PDOException $e) {
@@ -184,12 +178,8 @@ class User extends Model
 				}
 			}
 
-			// DB::enableQueryLog();
 			$querry = $query->update($data);
-			// $queries = DB::getQueryLog();
-			// $last_query = end($queries);
-			// print_r($last_query);
-			// exit;
+			
 		} catch (PDOException $e) {
 
 			$results[ META ][ SUCCESS ] = false;
