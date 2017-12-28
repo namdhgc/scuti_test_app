@@ -26,12 +26,6 @@ use App\Http\Response\Response;
 
 class UserController extends Controller
 {
-
-    function __construct()
-    {
-
-    }
-
     /**
     *-----------------------------------------------------------------------------
     * getData
@@ -74,7 +68,7 @@ class UserController extends Controller
 
         $results = $ModelUser->select( $where, $limit, $offset, $selectType, $order, $fields, $column );
 
-        return $results;
+        return view('index')->with( 'data', $results );
     }
 
     public function insertData()
@@ -161,10 +155,8 @@ class UserController extends Controller
             }
         }
 
-        return $results;
+        return json_encode( $results );
     }
-
-
 
     public function deleteData()
     {
@@ -194,13 +186,11 @@ class UserController extends Controller
             ];
 
             $deleted_record = $ModelUser->update_db( $data, $where );
-            // $deleted_record['meta']['success'] = true;
 
             if ( $deleted_record['meta']['success'] ) {
                 
                 // delete successfull
                 $results['response']        = [ 'id' => $id ];
-                // $results['response']        = $this->getData()['response'];
                 $results['meta']['msg']     = Lang::get('message.web.success.0003');
 
             } else {
@@ -219,7 +209,7 @@ class UserController extends Controller
             $results['meta']['msg']     = Lang::get('message.web.error.0001');
         }
 
-        return $results;
+        return json_encode( $results );
     }
 
 }

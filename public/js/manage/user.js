@@ -20,6 +20,10 @@ var User = function () {
         $("#content-data").load(" #data-table");
     };
 
+    var callBackUpdateData = function (res) {
+
+        $("#content-data").load(" #data-table");
+    };
 
     // public functions
     return {
@@ -71,7 +75,6 @@ var User = function () {
                     rules,
                     message
                 });
-
 
                 $(document).on('click', '.btn-delete', function() {
 

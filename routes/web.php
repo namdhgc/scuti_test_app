@@ -18,11 +18,7 @@ Route::group(['as' => 'get-'], function () {
 
 	Route::get('/', ['as' => 'home-page', function () {
 	    
-	    // return view('welcome');
-		$results = App::make('App\Http\Controllers\UserController')->getData();
-
-	    return view('index')->with( 'data', $results );
-
+		return App::make('App\Http\Controllers\UserController')->getData();
 	}]);
 });
 
@@ -30,22 +26,16 @@ Route::group(['as' => 'post-'], function () {
 
 	Route::post('delete-user', ['as' => 'delete-user', function () {
 
-		$results = App::make('App\Http\Controllers\UserController')->deleteData();
-
-		return json_encode( $results );
+		return App::make('App\ttp\Controllers\UserController')->deleteData();
 	}]);
 
 	Route::post('add-user', ['as' => 'add-user', function () {
 
-		$results = App::make('App\Http\Controllers\UserController')->insertData();
-
-		return json_encode( $results );
+		return App::make('App\Http\Controllers\UserController')->insertData();
 	}]);
 
 	Route::post('edit-user', ['as' => 'edit-user', function () {
 
-		$results = App::make('App\Http\Controllers\UserController')->updateData();
-
-		return json_encode( $results );
+		return App::make('App\Http\Controllers\UserController')->updateData();
 	}]);
 });

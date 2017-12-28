@@ -207,6 +207,5 @@
     <!-- End modal add-new -->
 
 
-
 </div>
 @endsection
