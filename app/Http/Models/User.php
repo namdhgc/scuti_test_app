@@ -16,7 +16,7 @@ class User extends Model
 
 	protected $table = 'users';
 
-	public function select ( $where = array(), $limit = null, $offset = null, $selectType = null, $order = null, $fields = null, $column = [])
+	public function select ( $where = array(), $limit = null, $offset = null, $selectType = null, $order = null, $fields = null, $column = [] )
 	{
 		
 		$Response = new Response();
@@ -53,7 +53,7 @@ class User extends Model
 				}
 			}
 
-			if(!is_null($limit)  && !is_null($offset) && $selectType != Config::get('system.type.query.paginate')){
+			if( !is_null($limit)  && !is_null($offset) && $selectType != Config::get('system.type.query.paginate') ) {
 				$query = $query->take($limit)->skip($offset);
 			}
 
@@ -100,7 +100,6 @@ class User extends Model
 
 	public function insert ( $data )
 	{
-		
 		$Response = new Response();
 		$results = $Response->response(200,'','',true);
 
@@ -117,9 +116,8 @@ class User extends Model
 		return $results;
 	}
 
-	public function insertGetId ( $data, $where = array())
+	public function insertGetId ( $data, $where = array() )
 	{
-		
 		$Response = new Response();
 		$results = $Response->response(200,'','',true);
 
@@ -153,9 +151,8 @@ class User extends Model
 		return $results;
 	}
 
-	public function update_db ( $data, $where)
+	public function update_db ( $data, $where )
 	{
-		
 		$Response = new Response();
 		$results = $Response->response(200,'','',true);
 
@@ -191,7 +188,6 @@ class User extends Model
 
 	public function checkExistsData( $field, $value )
 	{
-
 		$Response   = new Response();
         $results    = $Response->response(200,'','',true);
 

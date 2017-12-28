@@ -11,9 +11,6 @@
 |
 */
 
-
-
-
 Route::group(['as' => 'get-'], function () {
 
 	Route::get('/', 'UserController@getData')->name('home-page');

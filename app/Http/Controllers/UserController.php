@@ -41,9 +41,7 @@ class UserController extends Controller
     */
     public function getData()
     {
-
         $ModelUser  = new ModelUser();
-
         $limit      = 10;
         $offset     = null;
         $selectType = Config::get('system.type.query.paginate');
@@ -73,7 +71,6 @@ class UserController extends Controller
 
     public function insertData()
     {
-
         $ModelUser      = new ModelUser();
         $Response       = new Response();
         $results        = $Response->response(200,'','',true);
@@ -160,7 +157,6 @@ class UserController extends Controller
 
     public function deleteData()
     {
-
         $ModelUser      = new ModelUser();
         $Response       = new Response();
         $results        = $Response->response(200,'','',true);
