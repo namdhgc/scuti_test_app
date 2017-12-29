@@ -32,6 +32,7 @@
 @section('js')
 
     <script src="{{ URL::asset('js/manage/user.js') }}" type="text/javascript"></script>
+    <script src="{{ URL::asset('assets/global/plugins/jquery.blockui.min.js') }}" type="text/javascript"></script>
 
     <script type="text/javascript">
         User.init();
@@ -42,9 +43,11 @@
 @section('content')
 <div class="row">
 
-    <input type="hidden" id="route-home-page"   value="{{ URL::Route('get-home-page') }}">
-    <input type="hidden" id="route-add-user"    value="{{ URL::Route('add-user') }}">
-    <input type="hidden" id="route-edit-user"   value="{{ URL::Route('edit-user') }}">
+    <input type="hidden" id="route-home-page"           value="{{ URL::Route('get-home-page') }}">
+    <input type="hidden" id="route-add-user"            value="{{ URL::Route('add-user') }}">
+    <input type="hidden" id="route-edit-user"           value="{{ URL::Route('edit-user') }}">
+    <input type="hidden" id="route-sort-pagination"     value="{{ URL::Route('sort-pagination') }}">
+    <input type="hidden" id="current-page"              value="{{ COUNT( $data['response'] ) > 0 ? $data['response']->currentPage() : ''  }}">
 
     <div class="col-md-12 manager-table">
         <p>This element outside div class="content-data"</p>
@@ -52,7 +55,18 @@
             <div class="portlet-title">
                 <div class="caption ">
                     <i class="icon-settings "></i>
-                    <!-- <span class="caption-subject custom-subject"> Manage table </span> -->
+                    <div class="form-group">
+                        <label for="sort_by">Sort by:</label>
+                        <select class="form-control" id="sort_data">
+                            <option value=""                data-sort-by=""         data-sort-type="">None</option>
+                            <option value="name_asc"        data-sort-by="name"     data-sort-type="ASC">Name ASC</option>
+                            <option value="name_desc"       data-sort-by="name"     data-sort-type="DESC">Name DESC</option>
+                            <option value="address_asc"     data-sort-by="address"  data-sort-type="ASC">Address ASC</option>
+                            <option value="address_desc"    data-sort-by="address"  data-sort-type="DESC">Address DESC</option>
+                            <option value="age_asc"         data-sort-by="age"      data-sort-type="ASC">Age ASC</option>
+                            <option value="age_desc"        data-sort-by="age"      data-sort-type="DESC">Age DESC</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="actions">
                     <a data-toggle="modal" class="btn btn-xs green btn-add-user" title="Add new">
@@ -122,7 +136,44 @@
                     </div>
 
                     <center>
-                        {{ $data['response']->render() }}
+                        <?php
+                            $link_limit = 7; // maximum number of links (a little bit inaccurate, but will be ok for now)
+                        ?>
+
+                        @if ($data['response']->lastPage() > 1)
+                            <ul class="pagination">
+                                <li class="{{ ($data['response']->currentPage() == 1) ? ' disabled' : '' }}" >
+                                    <a href="{{ $data['response']->url(1) }}" class="pagination-link" data-page="1">First</a>
+                                 </li>
+                                @for ($i = 1; $i <= $data['response']->lastPage(); $i++)
+                                    <?php
+                                    $half_total_links   = floor($link_limit / 2);
+                                    $from               = $data['response']->currentPage() - $half_total_links;
+                                    $to                 = $data['response']->currentPage() + $half_total_links;
+                                    if ( $data['response']->currentPage() < $half_total_links ) {
+                                       $to += $half_total_links - $data['response']->currentPage();
+                                    }
+                                    if ( $data['response']->lastPage() - $data['response']->currentPage() < $half_total_links ) {
+                                        $from -= $half_total_links - ($data['response']->lastPage() - $data['response']->currentPage()) - 1;
+                                    }
+                                    ?>
+                                    @if ($from < $i && $i < $to)
+                                        <li class="{{ ($data['response']->currentPage() == $i) ? ' active' : '' }} {{ $i }}">
+                                            <a href="{{ $data['response']->url($i) }}" class="pagination-link" data-page="{{ $i }}">
+                                                {{ $i }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endfor
+                                <li class="{{ ($data['response']->currentPage() == $data['response']->lastPage()) ? ' disabled' : '' }}">
+                                    <a href="{{ $data['response']->url($data['response']->lastPage()) }}"
+                                        class="pagination-link"
+                                        data-page="{{ $data['response']->lastPage() }}">
+                                        Last
+                                    </a>
+                                </li>
+                            </ul>
+                        @endif
                     </center>
                 </div>    
             </div>

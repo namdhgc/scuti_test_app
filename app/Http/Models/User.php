@@ -8,6 +8,7 @@ use Cache;
 use Config;
 use App\Http\Response\Response;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\Paginator;
 /**
 *
 */
@@ -16,11 +17,16 @@ class User extends Model
 
 	protected $table = 'users';
 
-	public function select ( $where = array(), $limit = null, $offset = null, $selectType = null, $order = null, $fields = null, $column = [] )
+	public function select ( $where = array(), $limit = null, $offset = null, $selectType = null, $order = null, $fields = null, $column = [], $selected_page = null )
 	{
-		
 		$Response = new Response();
 		$results = $Response->response(200,'','',true);
+
+		if ( $selected_page != null ) {
+		    Paginator::currentPageResolver(function () use ($selected_page) {
+		        return $selected_page;
+		    });
+		}
 
 		try {
 			$query = DB::table( $this->table );

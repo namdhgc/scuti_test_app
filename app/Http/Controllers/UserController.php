@@ -42,13 +42,19 @@ class UserController extends Controller
     public function getData()
     {
         $ModelUser  = new ModelUser();
-        $limit      = 10;
+        $limit      = 2;
         $offset     = null;
         $selectType = Config::get('system.type.query.paginate');
         $fields     = null;
         $column     = [];
-        $sort       = 'created_time';
-        $sort_type  = 'DESC';
+        $sort_by    = Input::get('sort_by');
+        $sort_type  = Input::get('sort_type');
+        $selected_page  = Input::get('selected_page');
+
+        if ( !isset($sort_by) || !isset($sort_type) ) {
+            $sort_by    = 'created_time';
+            $sort_type  = 'DESC';
+        }
 
         $where      = [
             [
@@ -59,12 +65,12 @@ class UserController extends Controller
 
         $order      = [
             [
-                'fields'    => $sort,
+                'fields'    => $sort_by,
                 'operator'  => $sort_type
             ]
         ];
 
-        $results = $ModelUser->select( $where, $limit, $offset, $selectType, $order, $fields, $column );
+        $results = $ModelUser->select( $where, $limit, $offset, $selectType, $order, $fields, $column, $selected_page  );
 
         return view('index')->with( 'data', $results );
     }
@@ -140,7 +146,7 @@ class UserController extends Controller
             }
         }
 
-        return response()->json($results);;
+        return response()->json($results);
     }
 
     public function updateData()
@@ -235,7 +241,7 @@ class UserController extends Controller
             $results['meta']['msg']     = Lang::get('message.web.error.0001');
         }
 
-        return $results;
+        return response()->json($results);
     }
 
     public function deleteData()
@@ -280,6 +286,44 @@ class UserController extends Controller
             $results['meta']['success'] = false;
             $results['meta']['msg']     = Lang::get('message.web.error.0001');
         }
+
+        return response()->json($results);
+    }
+
+    public function SortPagination()
+    {
+        $ModelUser      = new ModelUser();
+        $Response       = new Response();
+        $results        = $Response->response(200,'','',true);
+        $selected_page  = Input::get('selected_page');
+        $sort_by        = Input::get('sort_by');
+        $sort_type      = Input::get('sort_type');
+        $limit          = 2;
+        $offset         = null;
+        $selectType     = Config::get('system.type.query.paginate');
+        $fields         = null;
+        $column         = [];
+
+        $where      = [
+            [
+                'fields'    => 'deleted_time',
+                'operator'  => 'null',
+            ]
+        ];
+
+        if ( !isset($sort_by) || !isset($sort_type) ) {
+            $sort_by    = 'created_time';
+            $sort_type  = 'DESC';
+        }
+
+        $order      = [
+            [
+                'fields'    => $sort_by,
+                'operator'  => $sort_type
+            ]
+        ];
+
+        $results = $ModelUser->select( $where, $limit, $offset, $selectType, $order, $fields, $column, $selected_page, $selected_page );
 
         return response()->json($results);
     }
