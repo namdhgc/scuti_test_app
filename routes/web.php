@@ -21,5 +21,5 @@ Route::group(['prefix' => 'user'], function() {
 	Route::post('delete', 'UserController@deleteData')->name('delete-user');
 	Route::post('add', 'UserController@insertData')->name('add-user');
 	Route::post('edit', 'UserController@updateData')->name('edit-user');
-	Route::post('sort-pagination', 'UserController@SortPagination')->name('sort-pagination');
+	Route::post('sort-pagination', 'UserController@sortPagination')->name('sort-pagination');
 });

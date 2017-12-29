@@ -42,7 +42,7 @@ class UserController extends Controller
     public function getData()
     {
         $ModelUser  = new ModelUser();
-        $limit      = 2;
+        $limit      = LIMIT_RECORD_PER_PAGE;
         $offset     = null;
         $selectType = Config::get('system.type.query.paginate');
         $fields     = null;
@@ -160,8 +160,14 @@ class UserController extends Controller
         $age            = Input::get('age');
         $avatar         = Input::file('avatar');
         $updated_time   = strtotime( \Carbon\Carbon::now()->toDateTimeString() );
-        $field          = 'id';
-        $check_id       = $ModelUser->checkExistsData( $field, $id );
+        $where          = [
+            [
+                'fields'    => 'id',
+                'operator'  => '=',
+                'value'     => $id
+            ]
+        ];
+        $check_id       = $ModelUser->checkExistsData( $where );
 
         if ( COUNT( $check_id['response'] ) > 0 ) {
             $data = [
@@ -251,8 +257,14 @@ class UserController extends Controller
         $results        = $Response->response(200,'','',true);
         $id             = Input::get('id');
         $deleted_time   = strtotime( \Carbon\Carbon::now()->toDateTimeString() );
-        $field          = 'id';
-        $check_id       = $ModelUser->checkExistsData( $field, $id );
+        $where          = [
+            [
+                'fields'    => 'id',
+                'operator'  => '=',
+                'value'     => $id
+            ]
+        ];
+        $check_id       = $ModelUser->checkExistsData( $where );
 
         if ( COUNT( $check_id['response'] ) > 0 ) {
             // record exists => delete data
@@ -290,7 +302,7 @@ class UserController extends Controller
         return response()->json($results);
     }
 
-    public function SortPagination()
+    public function sortPagination()
     {
         $ModelUser      = new ModelUser();
         $Response       = new Response();
@@ -298,7 +310,7 @@ class UserController extends Controller
         $selected_page  = Input::get('selected_page');
         $sort_by        = Input::get('sort_by');
         $sort_type      = Input::get('sort_type');
-        $limit          = 2;
+        $limit          = LIMIT_RECORD_PER_PAGE;
         $offset         = null;
         $selectType     = Config::get('system.type.query.paginate');
         $fields         = null;

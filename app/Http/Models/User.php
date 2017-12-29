@@ -192,22 +192,38 @@ class User extends Model
 		return $results;
 	}
 
-	public function checkExistsData( $field, $value )
+	public function checkExistsData( $where )
 	{
 		$Response   = new Response();
         $results    = $Response->response(200,'','',true);
 
         try {
+            $query = DB::table( $this->table . ' as ' . $this->table );
 
-            $query = DB::table( $this->table . ' as ' . $this->table )
-                                        ->where( $field , '=', $value )
-                                        ->whereNull( $this->table . '.deleted_time' )
-                                        ->first();
+            foreach ($where as $key => $value) {
 
+				switch ($value['operator']) {
+					case 'in':
+						$query = $query->whereIn($value['fields'], $value['value']);
+						break;
+					case 'null':
+						$query = $query->whereNull($value['fields']);
+						break;
+					case 'raw':
+						$query = $query->whereRaw($value['sql']);
+						break;
+					case 'or':
+						$query = $query->whereOr($value['fields'], $value['sub_operator'], $value['value']);
+						break;
+					default:
+						$query = $query->where($value['fields'], $value['operator'], $value['value']);
+						break;
+				}
+			}
+
+ 			$query->whereNull( $this->table . '.deleted_time' )->first();
             $results['response'] = $query;
-
         } catch (PDOException $e) {
-
             $results['meta']['success'] = false;
             $results['meta']['msg']     = $e->getMessage();
         }
