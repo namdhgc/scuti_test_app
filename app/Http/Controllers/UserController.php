@@ -117,6 +117,16 @@ class UserController extends Controller
                 $file_extension = $avatar->getClientOriginalExtension();
                 $file_real_path = $avatar->getRealPath();
                 $file_mime      = $avatar->getMimeType();
+                $file_size      = $avatar->getClientSize();
+
+                if ( $file_size > UPLOAD_MAX_FILE_SIZE ) {
+                    // file size too large
+                    $results['meta']['code']    = '0006';
+                    $results['meta']['success'] = false;
+                    $results['meta']['msg']     = Lang::get('message.web.error.0006');
+                    
+                    return response()->json($results);
+                }
 
                 // image mime types start with "image/"
                 if( substr( $file_mime, 0, 5 ) == 'image' ) {
@@ -130,6 +140,8 @@ class UserController extends Controller
                     $results['meta']['code']    = '0004';
                     $results['meta']['success'] = false;
                     $results['meta']['msg']     = Lang::get('message.web.error.0004');
+                    
+                    return response()->json($results);
                 }
             }
 
@@ -211,6 +223,16 @@ class UserController extends Controller
                     $file_extension = $avatar->getClientOriginalExtension();
                     $file_real_path = $avatar->getRealPath();
                     $file_mime      = $avatar->getMimeType();
+                    $file_size      = $avatar->getClientSize();
+
+                    if ( $file_size > UPLOAD_MAX_FILE_SIZE ) {
+                        // file size too large
+                        $results['meta']['code']    = '0006';
+                        $results['meta']['success'] = false;
+                        $results['meta']['msg']     = Lang::get('message.web.error.0006');
+                        
+                        return response()->json($results);
+                    }
 
                     // image mime types start with "image/"
                     if( substr( $file_mime, 0, 5 ) == 'image' ) {
@@ -225,6 +247,8 @@ class UserController extends Controller
                         $results['meta']['code']    = '0004';
                         $results['meta']['success'] = false;
                         $results['meta']['msg']     = Lang::get('message.web.error.0004');
+                        
+                        return response()->json($results);
                     }
                 }
 
@@ -268,14 +292,6 @@ class UserController extends Controller
 
         if ( COUNT( $check_id['response'] ) > 0 ) {
             // record exists => delete data
-            $where = [
-                [
-                    'fields'    => 'id',
-                    'operator'  => '=',
-                    'value'     => $id,
-                ]
-            ];
-
             $data = [
                 'deleted_time' => $deleted_time,
             ];

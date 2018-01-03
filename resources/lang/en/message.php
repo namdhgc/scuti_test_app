@@ -8,6 +8,7 @@
 				'0003' => "Insert fail. Please try again!",
 				'0004' => "Your file is not an image!",
 				'0005' => "The given data did not pass validation!",
+				'0006' => "File of size too large. Please choose other file!",
 			],
 
 			'success' => [

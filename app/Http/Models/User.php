@@ -221,8 +221,8 @@ class User extends Model
 				}
 			}
 
- 			$query->whereNull( $this->table . '.deleted_time' )->first();
-            $results['response'] = $query;
+ 			$query->whereNull( $this->table . '.deleted_time' );
+            $results['response'] = $query->first();
         } catch (PDOException $e) {
             $results['meta']['success'] = false;
             $results['meta']['msg']     = $e->getMessage();
