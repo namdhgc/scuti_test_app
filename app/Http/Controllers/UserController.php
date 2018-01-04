@@ -26,6 +26,8 @@ use App\Http\Response\Response;
 
 class UserController extends Controller
 {
+    public $ALLOWED_MIME_TYPES = [ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif' ];
+
     /**
     *-----------------------------------------------------------------------------
     * getData
@@ -129,7 +131,7 @@ class UserController extends Controller
                 }
 
                 // image mime types start with "image/"
-                if( substr( $file_mime, 0, 5 ) == 'image' ) {
+                if( in_array($file_mime, $this->ALLOWED_MIME_TYPES) ) {
                     // this is an image
                     // move file to public path
                     $full_path_file = 'upload/' . $file_name;
@@ -235,7 +237,7 @@ class UserController extends Controller
                     }
 
                     // image mime types start with "image/"
-                    if( substr( $file_mime, 0, 5 ) == 'image' ) {
+                    if( in_array($file_mime, $this->ALLOWED_MIME_TYPES) ) {
                         // this is an image
                         // move file to public path
                         $full_path_file = 'upload/' . $file_name;

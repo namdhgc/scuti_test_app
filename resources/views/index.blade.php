@@ -19,11 +19,8 @@
         }
 
         .preview-avatar {
-            max-width: 100px;
-        }
-
-        .avatar {
-            width: 10%;
+            min-width: 20px;
+            max-width: 40px;
         }
 
         .view-avatar {
@@ -124,16 +121,16 @@
                                             {{ $item->id }}
                                         </td>
                                         <td class="name">
-                                            {!! $item->name !!}
+                                            {{ $item->name }}
                                         </td>
                                         <td class="address">
-                                            {!! $item->address !!}
+                                            {{ $item->address }}
                                         </td>
                                         <td class="age">
                                             {{ $item->age }}
                                         </td>
                                         <td class="preview-avatar">
-                                            <img class="avatar" src="{{ URL::asset( isset( $item->avatar_path ) ? $item->avatar_path : Config::get('system.default_variables.default-image') ) }}">
+                                            <img class="preview-avatar" src="{{ URL::asset( isset( $item->avatar_path ) ? $item->avatar_path : Config::get('system.default_variables.default-image') ) }}">
                                         </td>
                                         <td>
                                             <a href="javascript:;" class="btn btn-xs green btn-view">
@@ -356,14 +353,16 @@
                             <label for="age">Age</label>
                             <label type="text" class="form-control" id="age" name="age" value="{{ old('age') }}"></label>
                         </div>
-                        <div class="row">
-                            <a href="javascript:;" class="btn default btn-cancel">Back</a>
-                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group ">
                             <img class="view-avatar" id="avatar" src=""/>
                         </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <div class="row">
+                        <a href="javascript:;" class="btn default btn-cancel">Back</a>
                     </div>
                 </div>
             </div>

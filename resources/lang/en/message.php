@@ -6,7 +6,7 @@
 				'0001' => "Record not found!",
 				'0002' => "Update fail. Please try again!",
 				'0003' => "Insert fail. Please try again!",
-				'0004' => "Your file is not an image!",
+				'0004' => "Your avatar must be an image and must be type of JPG, PNG or GIF!",
 				'0005' => "The given data did not pass validation!",
 				'0006' => "File of size too large. Please choose other file!",
 			],
