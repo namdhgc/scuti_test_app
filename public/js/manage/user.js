@@ -4,6 +4,9 @@ Custom module for you to write your own javascript functions
 var User = function () {
 
     var elem_block_loadding = 'body';
+    var old_name            = '';
+    var old_address         = '';
+    var old_age             = '';
 
     var refreshData = function() {
         var sort            = $('#sort_data');
@@ -205,6 +208,10 @@ var User = function () {
                     $('.manager-table').fadeToggle( function() {
                         $('.form-edit-user').fadeToggle();
                     });
+
+                    old_name    = name;
+                    old_address = address;
+                    old_age     = age;
                 });
 
                 $('.btn-submit-edit-user').on('click', function(e) {
@@ -303,6 +310,15 @@ var User = function () {
 
                 $('.btn-reset').on('click', function() {
                     $(this).closest('form')[0].reset();
+                    $('label[class=error]').remove();
+                    $('.error').removeClass('error');
+                });
+
+                $('.btn-reset-edit-form').on('click', function() {
+                    form_edit.find('input[name=name]').first().val( old_name );
+                    form_edit.find('textarea[name=address]').first().val( old_address );
+                    form_edit.find('input[name=age]').first().val( old_age );
+                    form_edit.valid();
                 });
             });
         },
