@@ -22,15 +22,30 @@ var User = function () {
 
     var callBackDeleteData = function (res) {
         $('#modal-delete').modal('hide');
+        show_toastr( res );
         refreshData();
     };
 
     var callBackInsertData = function(res) {
-        refreshData();
+
+        if ( res.meta.success ) {
+            hideForm( $('.btn-submit-add-user') );
+            refreshData();    
+        } else {
+            unblockUI();
+        }
+        show_toastr( res );
     };
 
     var callBackUpdateData = function(res) {
-        refreshData();
+
+        if ( res.meta.success ) {
+            hideForm( $('.btn-submit-edit-user') );
+            refreshData();    
+        } else {
+            unblockUI();
+        }
+        show_toastr( res );
     };
 
     var callBackSortPagination = function(res) {
@@ -69,12 +84,39 @@ var User = function () {
         });
     };
 
+    var hideForm = function( elm ) {
+        // $('.manager-table').removeClass('hide');
+        // elm.closest('form').addClass('hide');
+        var closest_form = elm.closest('form');
+        
+        if ( closest_form[0].className != 'form-delete-user' ) {
+            closest_form.fadeToggle( function() {
+                $('.manager-table').fadeToggle();
+            });
+        }
+
+        closest_form[0].reset();
+        $('label[class=error]').remove();
+        $('.error').removeClass('error');
+    };
+
+    var show_toastr = function( res ) {
+        var message = res.meta.msg;
+
+        if ( res.meta.success ) {
+            toastr.success( message );
+        } else {
+            toastr.error( message );
+        }
+    };
+
     // public functions
     return {
         init: function () {
             $(document).ready(function(){
                 var form_add_new    = $('#form-add-user');
                 var form_edit       = $('#form-edit-user');
+                var form_view       = $('#form-view-user');
 
                 var rules = {
                     name: {
@@ -138,9 +180,8 @@ var User = function () {
 
                 $('.btn-submit-add-user').on('click', function(e) {
                     e.preventDefault();
-                    blockUI();
                     if ( form_add_new.valid() ) {
-                        e.preventDefault();
+                        blockUI();
                         var url         = $('#route-add-user').val();
                         var form        = $('#form-add-user').get(0); 
                         var formData    = new FormData( form );
@@ -161,13 +202,15 @@ var User = function () {
                     form_edit.find('input[name=name]').first().val( name );
                     form_edit.find('textarea[name=address]').first().val( address );
                     form_edit.find('input[name=age]').first().val( age );
+                    $('.manager-table').fadeToggle( function() {
+                        $('.form-edit-user').fadeToggle();
+                    });
                 });
 
                 $('.btn-submit-edit-user').on('click', function(e) {
                     e.preventDefault();
-                    blockUI();
                     if ( form_edit.valid() ) {
-                        e.preventDefault();
+                        blockUI();
                         var url         = $('#route-edit-user').val();
                         var form        = $('#form-edit-user').get(0); 
                         var formData    = new FormData( form );
@@ -208,6 +251,8 @@ var User = function () {
                     var sort            = $('#sort_data');
                     var sort_by         = sort.find(':selected').attr('data-sort-by');
                     var sort_type       = sort.find(':selected').attr('data-sort-type');
+                    var icon_up         = 'fa fa-sort-asc';
+                    var icon_down       = 'fa fa-sort-desc';
 
                     data = {
                         selected_page   : current_page.val(),
@@ -217,6 +262,47 @@ var User = function () {
 
                     blockUI();
                     ajax_default(url, data, callBackSortPagination);
+
+                    if ( sort_type == 'ASC' ) {
+                        $('#sort-type-icon').attr('class', icon_up);
+                    } else if ( sort_type == 'DESC' ) {
+                        $('#sort-type-icon').attr('class', icon_down);
+                    } else {
+                        $('#sort-type-icon').attr('class', '');
+                    }
+                });
+
+                $(document).on('click', '.btn-add-user', function() {
+                    $('.manager-table').fadeToggle( function() {
+                        $('.form-add-user').fadeToggle();
+                    });
+                });
+
+                $(document).on('click', '.btn-cancel', function() {
+                    hideForm( $(this) );
+                });
+
+                $(document).on('click', '.btn-view', function() {
+                    var name    = $(this).closest('tr').attr('data-name');
+                    var address = $(this).closest('tr').attr('data-address');
+                    var age     = $(this).closest('tr').attr('data-age');
+                    var avatar  = $(this).closest('tr').attr('data-avatar');
+
+                    form_view.find('label[id=name]').first().text( name );
+                    form_view.find('label[id=address]').first().text( address );
+                    form_view.find('label[id=age]').first().text( age );
+                    form_view.find('img[id=avatar]').first().attr('src', avatar);
+                    $('.manager-table').fadeToggle( function() {
+                        $('.form-view-user').fadeToggle();
+                    });
+                });
+
+                $('.clear-input-file').on('click', function() {
+                    $(this).closest('form').find('input[name=avatar]').val('');
+                });
+
+                $('.btn-reset').on('click', function() {
+                    $(this).closest('form')[0].reset();
                 });
             });
         },

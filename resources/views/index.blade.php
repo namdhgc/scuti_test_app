@@ -19,11 +19,24 @@
         }
 
         .preview-avatar {
-            max-width: 100px;
+            min-width: 20px;
+            max-width: 40px;
         }
 
-        .avatar {
-            width: 10%;
+        .view-avatar {
+            width: 100%;
+        }
+
+        .hide-form {
+            display: none;
+        }
+
+        .page-content {
+            padding: 25px 20px 10px;
+        }
+
+        .view-address {
+             min-height: 70px;
         }
 
     </style>
@@ -50,21 +63,21 @@
     <input type="hidden" id="current-page"              value="{{ COUNT( $data['response'] ) > 0 ? $data['response']->currentPage() : ''  }}">
 
     <div class="col-md-12 manager-table">
-        <p>This element outside div class="content-data"</p>
         <div class="portlet light box">
             <div class="portlet-title">
                 <div class="caption ">
-                    <i class="icon-settings "></i>
                     <div class="form-group">
-                        <label for="sort_by">Sort by:</label>
+                        <label for="sort_by">Sort 
+                            <i id="sort-type-icon" class=""></i>
+                        </label>
                         <select class="form-control" id="sort_data">
                             <option value=""                data-sort-by=""         data-sort-type="">None</option>
-                            <option value="name_asc"        data-sort-by="name"     data-sort-type="ASC">Name ASC</option>
-                            <option value="name_desc"       data-sort-by="name"     data-sort-type="DESC">Name DESC</option>
-                            <option value="address_asc"     data-sort-by="address"  data-sort-type="ASC">Address ASC</option>
-                            <option value="address_desc"    data-sort-by="address"  data-sort-type="DESC">Address DESC</option>
-                            <option value="age_asc"         data-sort-by="age"      data-sort-type="ASC">Age ASC</option>
-                            <option value="age_desc"        data-sort-by="age"      data-sort-type="DESC">Age DESC</option>
+                            <option value="name_asc"        data-sort-by="name"     data-sort-type="ASC"> Name Ascending</option>
+                            <option value="name_desc"       data-sort-by="name"     data-sort-type="DESC">Name Descending</option>
+                            <option value="address_asc"     data-sort-by="address"  data-sort-type="ASC"> Address Ascending</option>
+                            <option value="address_desc"    data-sort-by="address"  data-sort-type="DESC">Address Descending</option>
+                            <option value="age_asc"         data-sort-by="age"      data-sort-type="ASC"> Age Ascending</option>
+                            <option value="age_desc"        data-sort-by="age"      data-sort-type="DESC">Age Descending</option>
                         </select>
                     </div>
                 </div>
@@ -101,7 +114,8 @@
                                             data-id="{{ $item->id }}"
                                             data-name="{{ $item->name }}"
                                             data-address="{{ $item->address }}"
-                                            data-age="{{ $item->age }}" >
+                                            data-age="{{ $item->age }}"
+                                            data-avatar="{{ URL::asset( isset( $item->avatar_path ) ? $item->avatar_path : Config::get('system.default_variables.default-image') ) }}" >
 
                                         <td class="id">
                                             {{ $item->id }}
@@ -116,14 +130,18 @@
                                             {{ $item->age }}
                                         </td>
                                         <td class="preview-avatar">
-                                            <img class="avatar" src="{{ URL::asset( isset( $item->avatar_path ) ? $item->avatar_path : Config::get('system.default_variables.default-image') ) }}">
+                                            <img class="preview-avatar" src="{{ URL::asset( isset( $item->avatar_path ) ? $item->avatar_path : Config::get('system.default_variables.default-image') ) }}">
                                         </td>
                                         <td>
-                                            <a href="javascript:;" class="btn btn-xs blue btn-edit" data-from-action="form-edit">
+                                            <a href="javascript:;" class="btn btn-xs green btn-view">
+                                                <i class="fa fa-edit"></i>
+                                                View
+                                            </a>
+                                            <a href="javascript:;" class="btn btn-xs blue btn-edit">
                                                 <i class="fa fa-edit"></i>
                                                 Edit
                                             </a>
-                                            <a href="javascript:;" class="btn btn-xs red btn-delete" data-id="{{ $item->id }}" data-from-delete="form-delete">
+                                            <a href="javascript:;" class="btn btn-xs red btn-delete" data-id="{{ $item->id }}">
                                                 <i class="fa fa-times"></i>
                                                 Delete
                                             </a>
@@ -189,12 +207,12 @@
                 <form action="#" data-url="{{ URL::Route('delete-user') }}" class="form-delete-user" method="POST">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Form delete user</h4>
+                        <h4 class="modal-title">Delete user</h4>
                         <input type="hidden" name="id" id="id" value="">
                     </div>
                     <div class="modal-body">
                         <span>
-                            <h4>Are you sure to delete this record?</h4>
+                            <h4>Are you sure to delete this user?</h4>
                         </span>
                     </div>
                     <div class="modal-footer">
@@ -212,14 +230,14 @@
     <!-- End Modal -->
 
     <!-- Modal add-new -->
-    <form action="#" method="POST" class="form-add-user form-action" id="form-add-user" enctype="multipart/form-data" >
+    <form action="#" method="POST" class="form-add-user form-action hide-form" id="form-add-user" enctype="multipart/form-data" >
         <input type="hidden" class="no-clear" id="token" name="_token" value="{{ csrf_token() }}">
         <div class="col-md-12">
             <div class="portlet light">
                 <div class="portlet-title">
                     <div class="caption">
                         <i class=" icon-layers"></i>
-                        <span class="caption-subject">Form add user</span>
+                        <span class="caption-subject">Add user</span>
                     </div>
                     <div class="actions">
                     </div>
@@ -235,18 +253,20 @@
                             <textarea class="form-control" id="address" name="address" rows="3" placeholder="Address of user">{{ old('address') }}</textarea>
                         </div>
                         <div class="form-group ">
-                            <label for="code">Age</label>
+                            <label for="age">Age</label>
                             <input type="text" class="form-control" id="age" name="age" value="{{ old('age') }}" placeholder="Age of user">
                         </div>
                         <div class="form-group ">
-                            <label for="code">Avatar</label>
-                            <input type="file" name="avatar" class="form-control" id="avatar">
+                            <label for="avatar">Avatar</label>
+                            <input type="file" name="avatar" class="avatar" id="avatar">
+                            <button type="button" class="btn btn-warning clear-input-file">Clear file</button>
                         </div>
                     </div>
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-12">
                                 <button type="button" class="btn btn-success btn-submit-add-user">Add new</button>
+                                <a href="javascript:;" class="btn btn-danger btn-reset">Reset</a>
                                 <a href="javascript:;" class="btn default btn-cancel">Cancel</a>
                             </div>
                         </div>
@@ -259,7 +279,7 @@
 
 
     <!-- Modal edit -->
-    <form action="#" method="POST" class="form-edit-user form-action" id="form-edit-user" enctype="multipart/form-data" >
+    <form action="#" method="POST" class="form-edit-user form-action hide-form" id="form-edit-user" enctype="multipart/form-data" >
         <input type="hidden" class="no-clear" name="_token" value="{{ csrf_token() }}">
         <input type="hidden" name="id" value="">
         <div class="col-md-12">
@@ -267,7 +287,7 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class=" icon-layers"></i>
-                        <span class="caption-subject">Form edit user</span>
+                        <span class="caption-subject">Edit user</span>
                     </div>
                     <div class="actions">
                     </div>
@@ -283,18 +303,20 @@
                             <textarea class="form-control" id="address" name="address" rows="3" placeholder="Address of user">{{ old('address') }}</textarea>
                         </div>
                         <div class="form-group ">
-                            <label for="code">Age</label>
+                            <label for="age">Age</label>
                             <input type="text" class="form-control" id="age" name="age" value="{{ old('age') }}" placeholder="Age of user">
                         </div>
                         <div class="form-group ">
-                            <label for="code">Avatar</label>
-                            <input type="file" name="avatar" class="form-control" id="avatar">
+                            <label for="avatar">Avatar</label>
+                            <input type="file" name="avatar" class="avatar" id="avatar">
+                            <button type="button" class="btn btn-warning clear-input-file">Clear file</button>
                         </div>
                     </div>
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-12">
                                 <button type="button" class="btn btn-success btn-submit-edit-user">Edit</button>
+                                <a href="javascript:;" class="btn btn-danger btn-reset">Reset</a>
                                 <a href="javascript:;" class="btn default btn-cancel">Cancel</a>
                             </div>
                         </div>
@@ -304,6 +326,49 @@
         </div>
     </form>
     <!-- End modal edit -->
+
+    <!-- Modal view -->
+    <form action="#" method="POST" class="form-view-user form-action hide-form" id="form-view-user" enctype="multipart/form-data" >
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class=" icon-layers"></i>
+                    <span class="caption-subject">View user</span>
+                </div>
+                <div class="actions">
+                </div>
+            </div>
+            <div class="portlet-body clearfix">
+                <div class="form-body">
+                    <div class="col-md-8">
+                        <div class="form-group ">
+                            <label for="name">Name</label>
+                            <label type="text" class="form-control" id="name" name="name" value="{{ old('name') }}"></label>
+                        </div>
+                        <div class="form-group  ">
+                            <label for="address">Address</label>
+                            <label class="form-control view-address" id="address" name="address">{{ old('address') }}</label>
+                        </div>
+                        <div class="form-group ">
+                            <label for="age">Age</label>
+                            <label type="text" class="form-control" id="age" name="age" value="{{ old('age') }}"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group ">
+                            <img class="view-avatar" id="avatar" src=""/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <div class="row">
+                        <a href="javascript:;" class="btn default btn-cancel">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- End modal view -->
 
 </div>
 @endsection

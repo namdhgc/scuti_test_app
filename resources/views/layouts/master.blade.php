@@ -16,6 +16,8 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset( 'assets/global/plugins/bootstrap/css/bootstrap.min.css' ) }}" />
     <link rel="stylesheet" type="text/css" href="{{ URL::asset( 'assets/global/css/components.min.css' ) }}" />
     <!-- <link rel="stylesheet" type="text/css" href="{{ URL::asset( 'assets/global/css/plugins.min.css' ) }}" /> -->
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset( 'assets/global/plugins/bootstrap-toastr/toastr.min.css') }}"/>
+
 	@yield('css')
 
 </head>
@@ -41,7 +43,10 @@
     <script type="text/javascript" src="{{ URL::asset( 'assets/global/scripts/app.min.js' ) }}" ></script>
     <script type="text/javascript" src="{{ URL::asset( 'assets/global/plugins/jquery-validation/js/jquery.validate.min.js' ) }}" ></script>
     <script type="text/javascript" src="{{ URL::asset( 'assets/global/plugins/jquery-validation/js/additional-methods.min.js' ) }}" ></script>
-
+    <!-- toastr plugins -->
+    <script type="text/javascript" src="{{ URL::asset( 'assets/global/plugins/bootstrap-toastr/toastr.min.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset( 'assets/pages/scripts/ui-toastr.js') }}"></script>
+    <!-- end toastr plugins -->
     <script type="text/javascript" src="{{ URL::asset( 'js/system/system.js' ) }}" ></script>
 
 	@yield('js')
