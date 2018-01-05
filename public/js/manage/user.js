@@ -2,7 +2,6 @@
 Custom module for you to write your own javascript functions
 **/
 var User = function () {
-
     var elem_block_loadding = 'body';
     var old_name            = '';
     var old_address         = '';
@@ -30,7 +29,6 @@ var User = function () {
     };
 
     var callBackInsertData = function(res) {
-
         if ( res.meta.success ) {
             hideForm( $('.btn-submit-add-user') );
             refreshData();    
@@ -41,7 +39,6 @@ var User = function () {
     };
 
     var callBackUpdateData = function(res) {
-
         if ( res.meta.success ) {
             hideForm( $('.btn-submit-edit-user') );
             refreshData();    
