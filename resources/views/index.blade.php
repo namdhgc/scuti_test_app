@@ -39,6 +39,23 @@
              min-height: 70px;
         }
 
+        .clear-input-file {
+            margin-top: 5px;
+        }
+
+        .view-address {
+            word-wrap: break-word;
+            width: 100%;
+            padding: 6px 12px;
+            background-color: #fff;
+            border: 1px solid #c2cad8;
+        }
+
+        .form-view-left {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
     </style>
 @endsection
 
@@ -121,10 +138,18 @@
                                             {{ $item->id }}
                                         </td>
                                         <td class="name">
-                                            {{ $item->name }}
+                                            @if ( strlen( $item->name ) > 40 )
+                                                {{ mb_substr( $item->name, 0, 40 ) . '...' }}
+                                            @else
+                                                {{ $item->name }}
+                                            @endif
                                         </td>
                                         <td class="address">
-                                            {{ $item->address }}
+                                            @if ( strlen( $item->address ) > 40 )
+                                                {{ mb_substr( $item->address, 0, 40 ) . '...' }}
+                                            @else
+                                                {{ $item->address }}
+                                            @endif
                                         </td>
                                         <td class="age">
                                             {{ $item->age }}
@@ -258,7 +283,7 @@
                         </div>
                         <div class="form-group ">
                             <label for="avatar">Avatar</label>
-                            <input type="file" name="avatar" class="avatar" id="avatar">
+                            <input type="file" name="avatar" class="avatar" id="avatar" accept="image/gif, image/jpeg, image/png">
                             <button type="button" class="btn btn-warning clear-input-file">Clear file</button>
                         </div>
                     </div>
@@ -308,15 +333,15 @@
                         </div>
                         <div class="form-group ">
                             <label for="avatar">Avatar</label>
-                            <input type="file" name="avatar" class="avatar" id="avatar">
+                            <input type="file" name="avatar" class="avatar" id="avatar" accept="image/gif, image/jpeg, image/png">
                             <button type="button" class="btn btn-warning clear-input-file">Clear file</button>
                         </div>
                     </div>
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-12">
-                                <button type="button" class="btn btn-success btn-submit-edit-user">Edit</button>
-                                <a href="javascript:;" class="btn btn-danger btn-reset">Reset</a>
+                                <button type="button" class="btn btn-success btn-submit-edit-user">Save</button>
+                                <a href="javascript:;" class="btn btn-danger btn-reset-edit-form">Reset</a>
                                 <a href="javascript:;" class="btn default btn-cancel">Cancel</a>
                             </div>
                         </div>
@@ -340,18 +365,18 @@
             </div>
             <div class="portlet-body clearfix">
                 <div class="form-body">
-                    <div class="col-md-8">
+                    <div class="col-md-8 form-view-left">
                         <div class="form-group ">
                             <label for="name">Name</label>
-                            <label type="text" class="form-control" id="name" name="name" value="{{ old('name') }}"></label>
+                            <label type="text" class="view-address" id="name" name="name" value=""></label>
                         </div>
                         <div class="form-group  ">
                             <label for="address">Address</label>
-                            <label class="form-control view-address" id="address" name="address">{{ old('address') }}</label>
+                            <label class="view-address" id="address" name="address"></label>
                         </div>
                         <div class="form-group ">
                             <label for="age">Age</label>
-                            <label type="text" class="form-control" id="age" name="age" value="{{ old('age') }}"></label>
+                            <label type="text" class="form-control" id="age" name="age" value=""></label>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -361,7 +386,7 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <div class="row">
+                    <div class="form-group">
                         <a href="javascript:;" class="btn default btn-cancel">Back</a>
                     </div>
                 </div>

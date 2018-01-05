@@ -23,6 +23,8 @@ use App\Http\Response\Response;
 * @author NamDH
 *
 */
+define('LIMIT_RECORD_PER_PAGE',  5);
+define('UPLOAD_MAX_FILE_SIZE',  10485760); // 10 * 1024 * 1024 = 10Mb
 
 class UserController extends Controller
 {
