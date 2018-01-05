@@ -51,6 +51,11 @@
             border: 1px solid #c2cad8;
         }
 
+        .form-view-left {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
     </style>
 @endsection
 
@@ -133,7 +138,11 @@
                                             {{ $item->id }}
                                         </td>
                                         <td class="name">
-                                            {{ $item->name }}
+                                            @if ( strlen( $item->name ) > 40 )
+                                                {{ mb_substr( $item->name, 0, 40 ) . '...' }}
+                                            @else
+                                                {{ $item->name }}
+                                            @endif
                                         </td>
                                         <td class="address">
                                             @if ( strlen( $item->address ) > 40 )
@@ -324,7 +333,7 @@
                         </div>
                         <div class="form-group ">
                             <label for="avatar">Avatar</label>
-                            <input type="file" name="avatar" class="avatar" id="avatar">
+                            <input type="file" name="avatar" class="avatar" id="avatar" accept="image/gif, image/jpeg, image/png">
                             <button type="button" class="btn btn-warning clear-input-file">Clear file</button>
                         </div>
                     </div>
@@ -356,10 +365,10 @@
             </div>
             <div class="portlet-body clearfix">
                 <div class="form-body">
-                    <div class="col-md-8">
+                    <div class="col-md-8 form-view-left">
                         <div class="form-group ">
                             <label for="name">Name</label>
-                            <label type="text" class="form-control" id="name" name="name" value=""></label>
+                            <label type="text" class="view-address" id="name" name="name" value=""></label>
                         </div>
                         <div class="form-group  ">
                             <label for="address">Address</label>
@@ -377,7 +386,7 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <div class="row">
+                    <div class="form-group">
                         <a href="javascript:;" class="btn default btn-cancel">Back</a>
                     </div>
                 </div>
