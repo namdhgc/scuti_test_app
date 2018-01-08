@@ -114,6 +114,13 @@ final class UserControllerTest extends TestCase
             'age' 		=> 23,
         ];
         $response 			= $this->call('POST', 'user/add', $request_array);
+        $this->assertDatabaseHas('users',
+            [
+                'id' 		=> $update_request_array['id'],
+                'name' 		=> $request_array['name'],
+                'age' 		=> $request_array['age'],
+                'address' 	=> $request_array['address'],
+            ]);
         $update_response 	= $this->call('POST', 'user/edit', $update_request_array);
 
         $this->assertDatabaseHas('users',
@@ -142,7 +149,6 @@ final class UserControllerTest extends TestCase
         ];
         $response 			= $this->call('POST', 'user/add', $request_array);
         $update_response 	= $this->call('POST', 'user/edit', $update_request_array);
-
         $this->assertDatabaseMissing('users',
             [
                 'id' 		=> $update_request_array['id'],
@@ -176,7 +182,6 @@ final class UserControllerTest extends TestCase
         ];
         $response 			= $this->call('POST', 'user/add', $request_array);
         $update_response 	= $this->call('POST', 'user/edit', $update_request_array);
-
         $this->assertDatabaseMissing('users',
             [
                 'id' 		=> $update_request_array['id'],
@@ -186,6 +191,7 @@ final class UserControllerTest extends TestCase
             ]);
         $this->assertDatabaseHas('users',
             [
+                'id' 		=> $update_request_array['id'],
                 'name' 		=> $request_array['name'],
                 'age' 		=> $request_array['age'],
                 'address' 	=> $request_array['address'],
@@ -210,7 +216,6 @@ final class UserControllerTest extends TestCase
         ];
         $response 			= $this->call('POST', 'user/add', $request_array);
         $update_response 	= $this->call('POST', 'user/edit', $update_request_array);
-
         $this->assertDatabaseMissing('users',
             [
                 'id' 		=> $update_request_array['id'],
@@ -220,6 +225,7 @@ final class UserControllerTest extends TestCase
             ]);
         $this->assertDatabaseHas('users',
             [
+                'id' 		=> $update_request_array['id'],
                 'name' 		=> $request_array['name'],
                 'age' 		=> $request_array['age'],
                 'address' 	=> $request_array['address'],
@@ -254,6 +260,7 @@ final class UserControllerTest extends TestCase
             ]);
         $this->assertDatabaseHas('users',
             [
+                'id' 		=> $update_request_array['id'],
                 'name' 		=> $request_array['name'],
                 'age' 		=> $request_array['age'],
                 'address' 	=> $request_array['address'],
@@ -274,10 +281,16 @@ final class UserControllerTest extends TestCase
         $Response 			= new Response();
     	$base_response		= $Response->response( '200', Lang::get('message.web.success.0003'), $delete_request_array, true );
         $response 			= $this->call('POST', 'user/add', $request_array);
+        $this->assertDatabaseHas('users',
+            [
+                'name' 		=> $request_array['name'],
+                'age' 		=> $request_array['age'],
+                'address' 	=> $request_array['address'],
+            ]);
         $delete_response 	= $this->call('POST', 'user/delete', $delete_request_array);
-
         $this->assertDatabaseMissing('users',
             [
+                'id' 			=> $delete_request_array['id'],
                 'name' 			=> $request_array['name'],
                 'age' 			=> $request_array['age'],
                 'address' 		=> $request_array['address'],
@@ -299,10 +312,17 @@ final class UserControllerTest extends TestCase
         $Response 			= new Response();
     	$base_response		= $Response->response( '0001', Lang::get('message.web.error.0001'), "", false );
         $response 			= $this->call('POST', 'user/add', $request_array);
-        $delete_response 	= $this->call('POST', 'user/delete', $delete_request_array);
-
         $this->assertDatabaseHas('users',
             [
+                'id' 		=> 1,
+                'name' 		=> $request_array['name'],
+                'age' 		=> $request_array['age'],
+                'address' 	=> $request_array['address'],
+            ]);
+        $delete_response 	= $this->call('POST', 'user/delete', $delete_request_array);
+        $this->assertDatabaseHas('users',
+            [
+                'id' 			=> 1,
                 'name' 			=> $request_array['name'],
                 'age' 			=> $request_array['age'],
                 'address' 		=> $request_array['address'],
@@ -435,10 +455,16 @@ final class UserControllerTest extends TestCase
             'avatar' 	=> $file,
         ];
         $response 			= $this->call('POST', 'user/add', $request_array);
-        $update_response 	= $this->call('POST', 'user/edit', $update_request_array);
-
         $this->assertDatabaseHas('users',
             [
+                'name' 		=> $request_array['name'],
+                'age' 		=> $request_array['age'],
+                'address' 	=> $request_array['address'],
+            ]);
+        $update_response 	= $this->call('POST', 'user/edit', $update_request_array);
+        $this->assertDatabaseHas('users',
+            [
+                'id' 		=> $update_request_array['id'],
                 'name' 		=> $update_request_array['name'],
                 'age' 		=> $update_request_array['age'],
                 'address' 	=> $update_request_array['address'],
@@ -473,6 +499,7 @@ final class UserControllerTest extends TestCase
         $update_response 	= $this->call('POST', 'user/edit', $update_request_array);
         $this->assertDatabaseMissing('users',
             [
+                'id' 		=> $update_request_array['id'],
                 'name' 		=> $update_request_array['name'],
                 'age' 		=> $update_request_array['age'],
                 'address' 	=> $update_request_array['address'],
@@ -512,6 +539,7 @@ final class UserControllerTest extends TestCase
         $update_response 	= $this->call('POST', 'user/edit', $update_request_array);
         $this->assertDatabaseMissing('users',
             [
+                'id' 		=> $update_request_array['id'],
                 'name' 		=> $update_request_array['name'],
                 'age' 		=> $update_request_array['age'],
                 'address' 	=> $update_request_array['address'],
@@ -551,6 +579,7 @@ final class UserControllerTest extends TestCase
         $update_response 	= $this->call('POST', 'user/edit', $update_request_array);
         $this->assertDatabaseMissing('users',
             [
+                'id' 		=> $update_request_array['id'],
                 'name' 		=> $update_request_array['name'],
                 'age' 		=> $update_request_array['age'],
                 'address' 	=> $update_request_array['address'],
