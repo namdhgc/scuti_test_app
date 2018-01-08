@@ -17,6 +17,10 @@ class User extends Model
 
 	protected $table = 'users';
 
+	protected $fillable = [
+        'name', 'address', 'age', 'avatar_path'
+    ];
+
 	public function select ( $where = array(), $limit = null, $offset = null, $selectType = null, $order = null, $fields = null, $column = [], $selected_page = null )
 	{
 		$Response = new Response();
