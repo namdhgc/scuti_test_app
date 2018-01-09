@@ -112,9 +112,17 @@ class UserController extends Controller
 
         if ( $validator->fails() ) {
             // The given data did not pass validation
+            $keys       = $validator->errors()->keys();
+            $messages   = $validator->errors()->getMessages();
+            $msg        = '';
+
+            foreach ($keys as $index => $key) {
+                
+                $msg .= $key . ': ' . $messages[$key][0] . "<br>";
+            }
             $results['meta']['code']    = '0005';
             $results['meta']['success'] = false;
-            $results['meta']['msg']     = Lang::get('message.web.error.0005');
+            $results['meta']['msg']     = $msg;
         } else {
             if ( !empty( $avatar ) ) {
                 $file_name      = $avatar->getClientOriginalName();
@@ -218,9 +226,17 @@ class UserController extends Controller
 
             if ( $validator->fails() ) {
                 // The given data did not pass validation
+                $keys       = $validator->errors()->keys();
+                $messages   = $validator->errors()->getMessages();
+                $msg        = '';
+
+                foreach ($keys as $index => $key) {
+                    
+                    $msg .= $key . ': ' . $messages[$key][0] . "<br>";
+                }
                 $results['meta']['code']    = '0005';
                 $results['meta']['success'] = false;
-                $results['meta']['msg']     = Lang::get('message.web.error.0005');
+                $results['meta']['msg']     = $msg;
             } else {
                 if ( !empty( $avatar ) ) {
                     $file_name      = $avatar->getClientOriginalName();

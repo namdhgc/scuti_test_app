@@ -16,6 +16,7 @@
 
         textarea {
             max-width: 100%;
+            max-height: 200px;
         }
 
         .preview-avatar {
@@ -54,6 +55,10 @@
         .form-view-left {
             padding-left: 0px;
             padding-right: 0px;
+        }
+
+        .required-character {
+            color: red;
         }
 
     </style>
@@ -270,15 +275,15 @@
                 <div class="portlet-body clearfix">
                     <div class="form-body">
                         <div class="form-group ">
-                            <label for="Name">Name</label>
+                            <label for="Name">Name <span class="required-character">*</span></label>
                             <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="Name of user">
                         </div>
                         <div class="form-group  ">
-                            <label for="address">Address</label>
+                            <label for="address">Address <span class="required-character">*</span></label>
                             <textarea class="form-control" id="address" name="address" rows="3" placeholder="Address of user">{{ old('address') }}</textarea>
                         </div>
                         <div class="form-group ">
-                            <label for="age">Age</label>
+                            <label for="age">Age <span class="required-character">*</span></label>
                             <input type="text" class="form-control" id="age" name="age" value="{{ old('age') }}" placeholder="Age of user">
                         </div>
                         <div class="form-group ">
@@ -320,15 +325,15 @@
                 <div class="portlet-body clearfix">
                     <div class="form-body">
                         <div class="form-group ">
-                            <label for="Name">Name</label>
+                            <label for="Name">Name <span class="required-character">*</span></label>
                             <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="Name of user">
                         </div>
                         <div class="form-group  ">
-                            <label for="address">Address</label>
+                            <label for="address">Address <span class="required-character">*</span></label>
                             <textarea class="form-control" id="address" name="address" rows="3" placeholder="Address of user">{{ old('address') }}</textarea>
                         </div>
                         <div class="form-group ">
-                            <label for="age">Age</label>
+                            <label for="age">Age <span class="required-character">*</span></label>
                             <input type="text" class="form-control" id="age" name="age" value="{{ old('age') }}" placeholder="Age of user">
                         </div>
                         <div class="form-group ">
