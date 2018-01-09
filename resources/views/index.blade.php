@@ -61,6 +61,27 @@
             color: red;
         }
 
+        .tooltip-icon .tooltip-text {
+            width: 120px;
+            background-color: #2a3035;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            border-radius: 10px !important;
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+        }
+
+        .tooltip-icon:hover .tooltip-text {
+            visibility: visible;
+        }
+
     </style>
 @endsection
 
@@ -290,6 +311,9 @@
                             <label for="avatar">Avatar</label>
                             <input type="file" name="avatar" class="avatar" id="avatar" accept="image/gif, image/jpeg, image/png">
                             <button type="button" class="btn btn-warning clear-input-file">Clear file</button>
+                            <i class="tooltip-icon fa fa-info-circle">
+                                <span class="tooltip-text">Upload max file size is 10Mb</span>
+                            </i>
                         </div>
                     </div>
                     <div class="form-actions">
@@ -340,6 +364,9 @@
                             <label for="avatar">Avatar</label>
                             <input type="file" name="avatar" class="avatar" id="avatar" accept="image/gif, image/jpeg, image/png">
                             <button type="button" class="btn btn-warning clear-input-file">Clear file</button>
+                            <i class="tooltip-icon fa fa-info-circle">
+                                <span class="tooltip-text">Upload max file size is 10Mb</span>
+                            </i>
                         </div>
                     </div>
                     <div class="form-actions">
