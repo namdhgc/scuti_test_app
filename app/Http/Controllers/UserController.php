@@ -106,7 +106,7 @@ class UserController extends Controller
             [
                 'name'      => 'required | max:100',
                 'address'   => 'required | max:300',
-                'age'       => 'required | numeric',
+                'age'       => 'required | numeric | digits:2',
             ]
         );
 
